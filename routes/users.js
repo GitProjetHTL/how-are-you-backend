@@ -3,6 +3,7 @@ var router = express.Router();
 
 require('../models/connection');
 const User = require('../models/user'); 
+const Emotion = require('../models/emotions');
 const { checkBody } = require('../modules/checkBody');
 const bcrypt = require('bcrypt');
 const uid2 = require('uid2');
@@ -12,9 +13,9 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-
+// register
 router.post('/signup', (req, res) => {
-  if (!checkBody(req.body, ['firstName', 'username', 'password'])) {
+  if (!checkBody(req.body, ['username', 'email', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
@@ -28,17 +29,13 @@ router.post('/signup', (req, res) => {
 
       const newUser = new User({
         username: req.body.username,
+        email: req.body.email,
         password: hash,
         token: uid2(32),
-        // emotion : { type: mongoose.Schema.Types.ObjectId, ref: 'emotions' },
-        survey: {
-          subjects: Array,
-          expectations: Array,
-          conditions : Boolean}, 
-        // comments: {
-        //   title : String,
-        //   content: String,
-        //   date : Date,},
+        survey: { 
+          subjects: [req.body.subjects],
+          expectations: [req.body.expectations],
+          conditions : req.body.conditions}, 
       });
 
       newUser.save().then(user => {
@@ -51,8 +48,103 @@ router.post('/signup', (req, res) => {
   });
 });
 
+// connexion 
+router.post('/signin', (req, res) => {
+  if (!checkBody(req.body, ['username', 'password'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  User.findOne({ username: { $regex: new RegExp(req.body.username, 'i') } })
+  // .populate('emotion')
+  .then(data => {
+    if (bcrypt.compareSync(req.body.password, data.password)) {
+      res.json({ result: true, token: data.token, username: data.username});
+    } else {
+      res.json({ result: false, error: 'User not found or wrong password' });
+    }
+  });
+});
+
+// update account
+router.put('/update', (req, res) => {
+
+  User.findOne({ token: req.body.token })
+  // .populate('emotion')
+  .then(data => {
+    if (!data) {
+      res.json({ result: false, error: 'User not found'});
+      return; 
+    }
+  });
+
+  User.updateOne({token : req.body.token}, 
+    {username: req.body.username}, {password: req.body.password}, {email: req.body.email})
+  .then(data => {
+    res.json({ result: true, user: 'User well updated'})
+  })
+})
+
+// add Emotion
+router.put('/emotion', (req, res) => {
+  if (!checkBody(req.body, ['token', '_id'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
 
 
+    Emotion.findById(req.body._id).then(emotion => {
+      if (!emotion) {
+        res.json({ result: false, error: 'Emotion not found' });
+        return;
+      }
+
+      User.findOne({ token: req.body.token }).then(user => {
+        if (user === null) {
+          res.json({ result: false, error: 'User not found' });
+          return;
+        }
+
+      if (user.emotion.includes(emotion._id)) { // User already added the emotion
+        User.updateOne({ _id: user._id }, { $pull: { emotion: emotion._id } }) // Remove emotion ID from user
+          .then(() => {
+            res.json({ result: false, message: 'Emotion deselected'});
+          });
+      } else { // User has not added the emotion
+        User.updateOne({ token: req.body.token}, { $push: { emotion: emotion } })// Add emotion ID to user
+        .populate('emotion')
+        .then(() => {
+            res.json({ result: true, message: 'Emotion well registered' });
+          });
+      }
+    });
+  });
+})
+
+// get historique 
+router.put('/historique', (req, res) => {
+  if (!checkBody(req.body, ['token'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  User.findOne({ token: req.body.token })
+  .then(data => {
+    console.log('user', data)
+    Emotion.findById(req.body._id)
+    .then(emotion => {
+      console.log('emotion', emotion)
+      if ('emotion',emotion) {
+        User.updateOne({ token: req.body.token }, {$push : {historique : {emotion: emotion.name, date: new Date()}}})
+        .then(data => {
+          res.json({ result: true, data: data});
+        })
+      } else {
+        res.json({ result: false, error: 'No emotion selected' });
+      }
+    })
+  });
+});
 
 
 //route Delete Account
@@ -63,20 +155,26 @@ router.delete('/', (req, res) => {
     return;
   }
 
-  //rechercher si le token == token donnée
+  // //rechercher si le token == token donnée
   User.findOne({ token: req.body.token })
   .then(user => {
     if (user === null) {
       res.json({ result: false, error: 'User not found' });
       return;
     }
+
   //supprimé un par rapport a son token 
-      User.deleteOne({ token: req.body.token })
-      .then(() => {
-          res.json({ result: true });
+    User.findOneAndRemove({ token: req.body.token })
+      .then((data) => {
+        console.log(data)
+        if (data){
+          res.json({ result: true, message : 'Account well deleted'});
+        } else {
+          res.json({result: false})
+        }
         });
       });
-  });
+})
 
 module.exports = router;
 
