@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const cardsSchema = mongoose.Schema({
-name: String, 
-target: [String],
-content: String,
-source: String, 
-like: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
+  name: String,
+  target: [String],
+  content: String,
+  source: String,
+  like: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
 });
 
-const Card = mongoose.model('cards', cardsSchema);
+const Card = mongoose.model("cards", cardsSchema);
 
 module.exports = Card;
