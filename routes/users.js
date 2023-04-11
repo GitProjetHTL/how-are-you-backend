@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+require('../models/connection');
+const { checkBody } = require('../modules/checkBody');
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -10,7 +13,7 @@ router.get('/', function(req, res, next) {
 //route Delete
 router.delete('/', (req, res) => {
   //verifier si le token existe
-  if (!checkBody(req.body, ['token'])) {
+  if (!checkBody(req.body, ['token','username'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
