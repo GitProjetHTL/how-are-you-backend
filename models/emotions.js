@@ -5,7 +5,7 @@ const emotionSchema = mongoose.Schema({
   emotionRemede: [String],
   description: String,
   imageUrl: String,
-  createdAt: Date,
+  // date: Date,
   score: Number, 
 });
 

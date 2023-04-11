@@ -6,13 +6,22 @@ expectations: Array,
 conditions : Boolean,
 })
 
+const historiqueSchema = mongoose.Schema({
+  emotion: String, 
+  date: Date,
+})
+
 const userSchema = mongoose.Schema({
   username: String,
   email: String, 
   dateOfBirth: Date, 
   password: String,
   token: String,
-  emotion : [{ type: mongoose.Schema.Types.ObjectId, ref: 'emotions' }],
+  emotion : {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Emotion' }],
+    default: [],
+  },
+  historique: [historiqueSchema], 
   survey: surveySchema, 
 });
 
