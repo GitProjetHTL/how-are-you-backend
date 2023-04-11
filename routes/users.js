@@ -122,7 +122,7 @@ router.put('/emotion', (req, res) => {
   });
 })
 
-// get historique 
+// add historique 
 router.put('/historique', (req, res) => {
   if (!checkBody(req.body, ['token'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
@@ -147,6 +147,24 @@ router.put('/historique', (req, res) => {
   });
 });
 
+// get historique by User 
+router.get('/historique', (req, res) => {
+  if (!checkBody(req.body, ['token'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  User.findOne({ token: req.body.token })
+  .then(data => {
+    if(data) {
+      res.json({result: true, hitorique: data.historique})
+    }else{ 
+      res.json({result: false, hitorique: 'No historique'})
+    }
+   
+
+  })
+})
 
 //route Delete Account
 router.delete('/', (req, res) => {
