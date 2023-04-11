@@ -21,7 +21,6 @@ router.put('/like', (req, res) => {
       }
   // verifier si audioID existe      
       Audio.findById(req.body.audioID)
-      
       .then(audio => {
         if (!audio) {
           res.json({ result: false, error: 'Audios not found' });
@@ -49,12 +48,13 @@ router.put('/like', (req, res) => {
 
 //afficher toutes les audios like
 router.get('/all/:token/liked-by/:userId', (req, res) => {
+  //verifier si les champs sont vides
   User.findOne({ token: req.params.token }).then(data => {
     if (data === null) {
       res.json({ result: false, error: 'User not found' });
       return;
     }
-
+  //afficher toutes les audios selon user id
     Audio.find({ like: req.params.userId }) // Trouver les audios aimés par l'utilisateur spécifié
       .then(data => {
         console.log(data);
@@ -62,6 +62,48 @@ router.get('/all/:token/liked-by/:userId', (req, res) => {
       });
   });
 });
+
+
+//afficher toutes les audios 
+router.get('/all/:token', (req, res) => {
+  //verifier si les champs sont vides
+  User.findOne({ token: req.params.token }).then(data => {
+    if (data === null) {
+      res.json({ result: false, error: 'User not found' });
+      return;
+    }
+  //afficher toutes les audios selon user id
+    Audio.find() // Trouver les audios aimés par l'utilisateur spécifié
+      .then(data => {
+        res.json({ result: true, data });
+      });
+  });
+});
+
+
+//afficher toutes les audios selon une recherche (targets)
+router.get('/search', (req, res) => {
+
+  if (!checkBody(req.body, ['token', 'search'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  //verifier si les champs sont vides
+  User.findOne({ token: req.body.token }).then(data => {
+    if (data === null) {
+      res.json({ result: false, error: 'User not found' });
+      return;
+    }
+  //afficher toutes les audios selon user id
+    Audio.find({target: { $regex: new RegExp(req.body.search, 'i') }}) // Trouver les audios aimés par l'utilisateur spécifié
+      .then(data => {
+        res.json({ result: true, data });
+      });
+  });
+});
+
+
 
 
   module.exports = router;
