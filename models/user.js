@@ -10,7 +10,6 @@ const commentsSchema = mongoose.Schema({
 title : String,
 content: String,
 date : Date,
-emotionOfTheDay : Array, 
 })
 
 const userSchema = mongoose.Schema({
@@ -19,8 +18,8 @@ const userSchema = mongoose.Schema({
   dateOfBirth: Date, 
   password: String,
   token: String,
+  emotion : { type: mongoose.Schema.Types.ObjectId, ref: 'emotions' },
   survey: surveySchema, 
-  emotions : { type: mongoose.Schema.Types.ObjectId, ref: 'emotions' },
   comments: commentsSchema, 
 });
 
