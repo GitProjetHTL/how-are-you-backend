@@ -24,6 +24,7 @@ router.get("/all/:token", (req, res) => {
 
 /**********recuperer les cartes par target********************** */
 
+
 router.get("/search", (req, res) => {
   if (!checkBody(req.body, ["token", "search"])) {
     res.json({ result: false, error: "Missing or empty fields" });
