@@ -56,7 +56,8 @@ router.post('/signin', (req, res) => {
     return;
   }
 
-  User.findOne({ username: { $regex: new RegExp(req.body.username, 'i') } })
+  // { $regex: new RegExp(req.body.username, 'i') }
+  User.findOne({ username: req.body.username })
   // .populate('emotion')
   .then(data => {
     if (bcrypt.compareSync(req.body.password, data.password)) {
