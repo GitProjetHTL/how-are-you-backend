@@ -22,7 +22,8 @@ router.post('/signup', (req, res) => {
   }
 
   // Check if the user has not already been registered
-  User.findOne({ username: { $regex: new RegExp(req.body.username, 'i') } })
+  // { $regex: new RegExp(req.body.username, 'i') }
+  User.findOne({ username: req.body.username })
   .then(data => {
 
     if (data === null) {
