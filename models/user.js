@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const surveySchema = mongoose.Schema({
-subjects: String,
-expectations: String,
+subjects: Array,
+expectations: Array,
 conditions : Boolean,
 })
 
