@@ -68,14 +68,14 @@ router.put("/like", (req, res) => {
         // User already liked the tweet
         Cards.updateOne({ _id: cards._id }, { $pull: { likes: user._id } }) // Remove user ID from likes
           .then(() => {
-            res.json({ result: false, like: "false" });
+            res.json({ result: true, like: "false" });
             // console.log(cards);
           });
       } else {
         // User has not liked the tweet
         Cards.updateOne({ _id: cards._id }, { $push: { likes: user._id } }) // Add user ID to likes
           .then(() => {
-            res.json({ result: true, like: "true" });
+            res.json({ result: false, like: "true" });
             // console.log(cards);
           });
       }
