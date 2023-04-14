@@ -55,7 +55,7 @@ router.put("/like", (req, res) => {
       return;
     }
     // verifier si cardsID existe
-    Cards.findById(_id).then((cards) => {
+    Cards.findById(id).then((cards) => {
       if (!cards) {
         res.json({ result: false, error: "Cards not found" });
         return;
