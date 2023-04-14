@@ -61,7 +61,7 @@ router.put("/like", (req, res) => {
         return;
       }
       //verifie si ID d'un user est dans le tableaux like de audio
-      if (Cards.like.includes(user._id)) {
+      if (cards.like.includes(user._id)) {
         // User already liked the tweet
         Cards.updateOne({ _id: cards._id }, { $pull: { like: user._id } }) // Remove user ID from likes
           .then(() => {
