@@ -50,30 +50,33 @@ router.put("/like", (req, res) => {
   }
   //verifier si le token existe
   User.findOne({ token: req.body.token }).then((user) => {
+    console.log(user)
     if (user === null) {
       res.json({ result: false, error: "User not found" });
       return;
     }
-    // verifier si audioID existe
+    // verifier si cardsID existe
     Cards.findById(req.body.cardsID).then((cards) => {
+      console.log(cards.likes)
       if (!cards) {
         res.json({ result: false, error: "Cards not found" });
         return;
       }
+      console.log(cards)
       //verifie si ID d'un user est dans le tableaux like de audio
-      if (Cards.like.includes(user._id)) {
+      if (cards.likes.includes(user._id)) {
         // User already liked the tweet
-        Cards.updateOne({ _id: cards._id }, { $pull: { like: user._id } }) // Remove user ID from likes
+        Cards.updateOne({ _id: cards._id }, { $pull: { likes: user._id } }) // Remove user ID from likes
           .then(() => {
             res.json({ result: true, like: "false" });
-            console.log(cards);
+            // console.log(cards);
           });
       } else {
         // User has not liked the tweet
-        Cards.updateOne({ _id: cards._id }, { $push: { like: user._id } }) // Add user ID to likes
+        Cards.updateOne({ _id: cards._id }, { $push: { likes: user._id } }) // Add user ID to likes
           .then(() => {
             res.json({ result: true, like: "true" });
-            console.log(cards);
+            // console.log(cards);
           });
       }
     });

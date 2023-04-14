@@ -5,7 +5,7 @@ const cardsSchema = mongoose.Schema({
   target: [String],
   content: String,
   source: String,
-  like: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
 });
 
 const Card = mongoose.model("cards", cardsSchema);

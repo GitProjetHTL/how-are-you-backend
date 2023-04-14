@@ -23,9 +23,9 @@ router.post('/signup', (req, res) => {
 
   // Check if the user has not already been registered
   // { $regex: new RegExp(req.body.username, 'i') }
-  User.findOne({ username: req.body.username })
+  User.findOne({ username: req.body.user })
   .then(data => {
-    console.log(data)
+
     if (data === null) {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
@@ -87,6 +87,22 @@ router.put('/update', (req, res) => {
     res.json({ result: true, user: 'User well updated'})
   })
 })
+
+//show all Emotions on Home Screen
+router.get("/allEmotions/:token", (req, res) => {
+  //verifier si les champs sont vides
+  User.findOne({ token: req.params.token }).then((data) => {
+    if (data === null) {
+      res.json({ result: false, error: "User not found" });
+      return;
+    }
+    //afficher toutes les cards selon user id
+    Emotion.find() // Trouver les cards aimés par l'utilisateur spécifié
+      .then((data) => {
+        res.json({ result: true, data });
+      });
+  });
+});
 
 // add Emotion
 router.put('/emotion', (req, res) => {
