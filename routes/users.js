@@ -62,7 +62,7 @@ router.post('/signin', (req, res) => {
   // .populate('emotion')
   .then(data => {
     if (bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, token: data.token, username: data.username});
+      res.json({ result: true, token: data.token, username: data.username, userId: data._id});
     } else {
       res.json({ result: false, error: 'User not found or wrong password' });
     }
