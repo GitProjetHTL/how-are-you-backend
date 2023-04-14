@@ -54,8 +54,8 @@ router.put("/like", (req, res) => {
       res.json({ result: false, error: "User not found" });
       return;
     }
-    // verifier si audioID existe
-    Cards.findById(req.body.audioID).then((cards) => {
+    // verifier si cardsID existe
+    Cards.findById(_id).then((cards) => {
       if (!cards) {
         res.json({ result: false, error: "Cards not found" });
         return;

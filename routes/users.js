@@ -23,9 +23,9 @@ router.post('/signup', (req, res) => {
 
   // Check if the user has not already been registered
   // { $regex: new RegExp(req.body.username, 'i') }
-  User.findOne({ username: req.body.username })
+  User.findOne({ username: req.body.user })
   .then(data => {
-    console.log(data)
+
     if (data === null) {
       const hash = bcrypt.hashSync(req.body.password, 10);
 
