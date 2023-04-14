@@ -64,18 +64,19 @@ router.put("/like", (req, res) => {
       }
       console.log(cards)
       //verifie si ID d'un user est dans le tableaux like de audio
-      if (cards.likes.includes(user._id)) {
+      // cards.likes.includes(user._id)
+      if (cards.likes.indexOf(user._id) !== -1) {
         // User already liked the tweet
         Cards.updateOne({ _id: cards._id }, { $pull: { likes: user._id } }) // Remove user ID from likes
           .then(() => {
-            res.json({ result: true, like: "false" });
+            res.json({ result: true, like: false });
             // console.log(cards);
           });
       } else {
         // User has not liked the tweet
         Cards.updateOne({ _id: cards._id }, { $push: { likes: user._id } }) // Add user ID to likes
           .then(() => {
-            res.json({ result: false, like: "true" });
+            res.json({ result: true, like: true });
             // console.log(cards);
           });
       }
