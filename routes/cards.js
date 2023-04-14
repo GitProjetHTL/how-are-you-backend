@@ -94,10 +94,10 @@ router.get("/all/:token/liked-by/:userId", (req, res) => {
       return;
     }
     //afficher toutes les cartes selon user id
-    Cards.find({ like: req.params.userId }) // Trouver les cartes aimés par l'utilisateur spécifié
+    Cards.find({ likes: req.params.userId }) // Trouver les cartes aimés par l'utilisateur spécifié
       .then((data) => {
         console.log(data);
-        res.json({ result: true, data });
+        res.json({ result: true, data: data });
       });
   });
 });
