@@ -42,7 +42,7 @@ router.get("/search/:token/:search", (req, res) => {
 });
 /*******************************ajouter les likes/dislike***************************************** */
 
-router.put("/like", (req, res) => {
+router.post("/like", (req, res) => {
   //verifier si les champs sont vides
   if (!checkBody(req.body, ["token", "cardsID"])) {
     res.json({ result: false, error: "Missing or empty fields" });
