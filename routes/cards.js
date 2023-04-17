@@ -25,21 +25,21 @@ router.get("/all/:token", (req, res) => {
 /**********recuperer les cartes par target********************** */
 
 
-router.get("/search/:token/:search", (req, res) => {
+router.get("/search/:search", (req, res) => {
 
-  //verifier si les champs sont vides
-  User.findOne({ token: req.params.token }).then((data) => {
-    if (data === null) {
-      res.json({ result: false, error: "User not found" });
-      return;
-    }
+  // //verifier si les champs sont vides
+  // User.findOne({ token: req.params.token }).then((data) => {
+  //   if (data === null) {
+  //     res.json({ result: false, error: "User not found" });
+  //     return;
+  //   }
     //afficher toutes les cards selon user id
     Cards.find({ target: { $regex: new RegExp(req.params.search, "i") } }) // Trouver les audios aimés par l'utilisateur spécifié
       .then((data) => {
         res.json({ result: true, data });
       });
   });
-});
+// });
 /*******************************ajouter les likes/dislike***************************************** */
 
 router.put("/like", (req, res) => {
