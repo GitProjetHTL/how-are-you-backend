@@ -124,7 +124,7 @@ router.put('/emotion', (req, res) => {
         }
 
       if (user.emotion.includes(emotion._id)) { // User already added the emotion
-        User.updateOne({ _id: user._id }, { $pull: { emotion: emotion._id } }) // Remove emotion ID from user
+        User.updateOne({ token: req.body.token }, { $pull: { emotion: emotion._id } }) // Remove emotion ID from user
           .then(() => {
             res.json({ result: false, message: 'Emotion deselected'});
           });
