@@ -178,7 +178,6 @@ router.get('/historique', (req, res) => {
     }else{ 
       res.json({result: false, hitorique: 'No historique'})
     }
-   
 
   })
 })
