@@ -41,7 +41,7 @@ router.post('/signup', (req, res) => {
       });
 
       newUser.save().then(user => {
-        res.json({ result: true, token: user.token });
+        res.json({ result: true, token: user.token, userId: user._id});
       });
     } else {
       // User already exists in database
@@ -89,20 +89,19 @@ router.put('/update', (req, res) => {
 })
 
 //show all Emotions on Home Screen
-router.get("/allEmotions/:token", (req, res) => {
-  //verifier si les champs sont vides
-  User.findOne({ token: req.params.token }).then((data) => {
-    if (data === null) {
-      res.json({ result: false, error: "User not found" });
-      return;
-    }
+router.get("/allEmotions", (req, res) => {
+  // //verifier si les champs sont vides
+  // User.findOne({ token: req.params.token }).then((data) => {
+  //   if (data === null) {
+  //     res.json({ result: false, error: "User not found" });
+  //     return;
+  //   }
     //afficher toutes les cards selon user id
     Emotion.find() // Trouver les cards aimés par l'utilisateur spécifié
       .then((data) => {
         res.json({ result: true, data });
       });
   });
-});
 
 // add Emotion
 router.put('/emotion', (req, res) => {
