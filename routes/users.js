@@ -174,9 +174,9 @@ router.get('/historique/:token', (req, res) => {
   User.findOne({ token: req.params.token })
   .then(data => {
     if(data) {
-      res.json({result: true, hitorique: data.historique})
+      res.json({result: true, historique: data.historique})
     }else{ 
-      res.json({result: false, hitorique: 'No historique'})
+      res.json({result: false, historique: 'No historique'})
     }
 
 
