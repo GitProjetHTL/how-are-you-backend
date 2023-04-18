@@ -17,10 +17,7 @@ const userSchema = mongoose.Schema({
   dateOfBirth: Date, 
   password: String,
   token: String,
-  emotion : {
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Emotion' }],
-    default: [],
-  },
+  emotion : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Emotion' }],
   historique: [historiqueSchema], 
   survey: surveySchema, 
 });

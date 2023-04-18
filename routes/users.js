@@ -124,7 +124,7 @@ router.put('/emotion', (req, res) => {
         }
 
       if (user.emotion.includes(emotion._id)) { // User already added the emotion
-        User.updateOne({ _id: user._id }, { $pull: { emotion: emotion._id } }) // Remove emotion ID from user
+        User.updateOne({ token: req.body.token }, { $pull: { emotion: emotion._id } }) // Remove emotion ID from user
           .then(() => {
             res.json({ result: false, message: 'Emotion deselected'});
           });
@@ -153,7 +153,7 @@ router.put('/historique', (req, res) => {
     .then(emotion => {
       console.log('emotion', emotion)
       if ('emotion',emotion) {
-        User.updateOne({ token: req.body.token }, {$push : {historique : {emotion: emotion.name, date: new Date()}}})
+        User.updateOne({ token: req.body.token }, {$push : {historique : {emotion: emotion._id, date: new Date()}}})
         .then(data => {
           res.json({ result: true, data: data});
         })
@@ -165,20 +165,40 @@ router.put('/historique', (req, res) => {
 });
 
 // get historique by User 
-router.get('/historique', (req, res) => {
-  if (!checkBody(req.body, ['token'])) {
+router.get('/historique/:token', (req, res) => {
+  if (!checkBody(req.params, ['token'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
 
-  User.findOne({ token: req.body.token })
+  User.findOne({ token: req.params.token })
   .then(data => {
     if(data) {
-      res.json({result: true, hitorique: data.historique})
+      res.json({result: true, historique: data.historique})
     }else{ 
-      res.json({result: false, hitorique: 'No historique'})
+      res.json({result: false, historique: 'No historique'})
     }
-   
+
+
+  })
+})
+
+//get emotion from historique
+router.get('/emotion/:_id', (req, res) => {
+  if (!checkBody(req.params, ['_id'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  Emotion.findOne({_id : req.params._id})
+  .then(data => {
+    console.log(data)
+    if(data) {
+      res.json({result: true, data : data})
+    }else{ 
+      res.json({result: false, error: 'Emotion not found'})
+    }
+
 
   })
 })
