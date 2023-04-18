@@ -183,6 +183,25 @@ router.get('/historique/:token', (req, res) => {
   })
 })
 
+//get emotion from historique
+router.get('/emotion/:_id', (req, res) => {
+  if (!checkBody(req.params, ['_id'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  Emotion.findOne({ emotionID: req.params._id })
+  .then(data => {
+    if(data) {
+      res.json({result: true, data})
+    }else{ 
+      res.json({result: false, error: 'Emotion not found'})
+    }
+
+
+  })
+})
+
 //route Delete Account
 router.delete('/', (req, res) => {
   //verifier si le token existe
