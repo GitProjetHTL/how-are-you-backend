@@ -153,7 +153,7 @@ router.put('/historique', (req, res) => {
     .then(emotion => {
       console.log('emotion', emotion)
       if ('emotion',emotion) {
-        User.updateOne({ token: req.body.token }, {$push : {historique : {emotion: emotion.name, date: new Date()}}})
+        User.updateOne({ token: req.body.token }, {$push : {historique : {emotion: emotion._id, date: new Date()}}})
         .then(data => {
           res.json({ result: true, data: data});
         })
@@ -190,10 +190,11 @@ router.get('/emotion/:_id', (req, res) => {
     return;
   }
 
-  Emotion.findById(req.params._id)
+  Emotion.findOne({_id : req.params._id})
   .then(data => {
+    console.log(data)
     if(data) {
-      res.json({result: true, data})
+      res.json({result: true, data : data})
     }else{ 
       res.json({result: false, error: 'Emotion not found'})
     }
