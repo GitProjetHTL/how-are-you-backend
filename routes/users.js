@@ -190,7 +190,7 @@ router.get('/emotion/:_id', (req, res) => {
     return;
   }
 
-  Emotion.findOne({ emotionID: req.params._id })
+  Emotion.findById(req.params._id)
   .then(data => {
     if(data) {
       res.json({result: true, data})
