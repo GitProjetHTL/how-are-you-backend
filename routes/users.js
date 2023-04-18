@@ -178,7 +178,7 @@ router.get('/historique/:token', (req, res) => {
     }else{ 
       res.json({result: false, historique: 'No historique'})
     }
-  
+
 
   })
 })
@@ -194,7 +194,7 @@ router.get('/emotion/:_id', (req, res) => {
   .then(data => {
     console.log(data)
     if(data) {
-      res.json({result: true, emotion: data})
+      res.json({result: true, data : data})
     }else{ 
       res.json({result: false, error: 'Emotion not found'})
     }
