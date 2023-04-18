@@ -165,19 +165,20 @@ router.put('/historique', (req, res) => {
 });
 
 // get historique by User 
-router.get('/historique', (req, res) => {
-  if (!checkBody(req.body, ['token'])) {
+router.get('/historique/:token', (req, res) => {
+  if (!checkBody(req.params, ['token'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
 
-  User.findOne({ token: req.body.token })
+  User.findOne({ token: req.params.token })
   .then(data => {
     if(data) {
       res.json({result: true, hitorique: data.historique})
     }else{ 
       res.json({result: false, hitorique: 'No historique'})
     }
+
 
   })
 })
