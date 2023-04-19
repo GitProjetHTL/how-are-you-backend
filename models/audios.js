@@ -5,7 +5,8 @@ name: String,
 target: [String],
 content: String,
 source: String, 
-like:[{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }] 
+like:[{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }] ,
+image: String,
 });
 
 const Audio = mongoose.model('audios', audiosSchema);
