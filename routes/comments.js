@@ -39,13 +39,13 @@ router.put('/update', (req, res) => {
       res.json({ result: false, error: 'Missing or empty fields' });
       return;
     }
-  
-    // Vérification token
-    User.findOne({ token: req.body.token }).then(user => {
-      if (user === null) {
-        res.json({ result: false, error: 'User not found' });
-        return;
-      }
+
+    // // Vérification token
+    // User.findOne({ token: req.body.token }).then(user => {
+    //   if (user === null) {
+    //     res.json({ result: false, error: 'User not found' });
+    //     return;
+    //   }
     // Recherche + update du content  
       Comment.findById(req.body.commentId).then(comment => {
         if (!comment) {
@@ -59,7 +59,7 @@ router.put('/update', (req, res) => {
         }
       });
     });
-  });
+
 
 
 // route deleteComment - DELETE
