@@ -30,14 +30,14 @@ router.put("/like", (req, res) => {
         // l'utilisateur a deja like l audio
         Audio.updateOne({ _id: audio._id }, { $pull: { like: user._id } }) // retirer luserID de l audio
           .then(() => {
-            res.json({ result: true, like: "false" });
+            res.json({ result: false, like: false });
             // console.log(audio);
           });
       } else {
         // l'utilisateur n'a pas liké l audio
         Audio.updateOne({ _id: audio._id }, { $push: { like: user._id } }) // ajouter l userID de l audio
           .then(() => {
-            res.json({ result: true, like: "true" });
+            res.json({ result: true, like: true });
             // console.log(audio);
           });
       }
