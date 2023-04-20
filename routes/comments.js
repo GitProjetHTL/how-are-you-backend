@@ -45,22 +45,48 @@ router.put("/update", (req, res) => {
       res.json({ result: false, error: "User not found" });
       return;
     }
-    // 3. Recherche du commentaire par son ID + update du content
-    Comment.findById(req.body.commentId).then((comment) => {
-      if (!comment) {
-        res.json({ result: false, error: "Comment not found" });
-        return;
-      } else {
-        Comment.updateOne(
-          { _id: req.body.commentId },
-          { content: req.body.content }
-        ) // Update
-          .then((data) => {
-            res.json({ result: true, updated: data });
-          });
-      }
+
+    // Recherche + update du content  
+      Comment.findById(req.body.commentId).then(comment => {
+        if (!comment) {
+          res.json({ result: false, error: 'Comment not found' });
+          return;
+        } else { 
+          Comment.updateOne({ _id: req.body.commentId }, { content: req.body.content }) // Update
+            .then((data) => {
+              res.json({ result: true, updated: data });
+            });
+        }
+      });
     });
-  });
+
+
+
+// route deleteComment - DELETE
+router.delete('/delete', (req, res) => {
+        // Checkbody pour les champs vides
+        if (!checkBody(req.body, ['commentId'])) {
+            res.json({ result: false, error: 'Missing or empty fields' });
+            return;
+          }
+        
+          // Vérification token
+          User.findOne({ token: req.body.token }).then(user => {
+            if (user === null) {
+              res.json({ result: false, error: 'User not found' });
+              return;
+            }
+        })
+
+        Comment.findOneAndRemove({ _id: req.body.commentId })
+        .then((data) => {
+            if (!data) {
+                res.json({ result: false, error: 'Comment not found' });
+            } else {
+                res.json({ result: true, deletedComment: data });
+            }
+          })
+
 });
 
 //************* */ route supprimer un commentaire - DELETE
