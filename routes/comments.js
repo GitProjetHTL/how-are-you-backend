@@ -64,31 +64,6 @@ router.put("/update", (req, res) => {
   });
 });
 
-// route deleteComment - DELETE
-router.delete("/delete", (req, res) => {
-  // Checkbody pour les champs vides
-  if (!checkBody(req.body, ["commentId"])) {
-    res.json({ result: false, error: "Missing or empty fields" });
-    return;
-  }
-
-  // Vérification token
-  User.findOne({ token: req.body.token }).then((user) => {
-    if (user === null) {
-      res.json({ result: false, error: "User not found" });
-      return;
-    }
-  });
-
-  Comment.findOneAndRemove({ _id: req.body.commentId }).then((data) => {
-    if (!data) {
-      res.json({ result: false, error: "Comment not found" });
-    } else {
-      res.json({ result: true, deletedComment: data });
-    }
-  });
-});
-
 //************* */ route supprimer un commentaire - DELETE
 router.delete("/delete", (req, res) => {
   // 1. Checkbody pour les champs vides
